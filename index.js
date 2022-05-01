@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.get('/',(req,res)=>{
-    res.send({name:'Aadharsh'});
+    res.send({name:'Aadharsh Kannan'});
 });
 
 // Test env is 3000 and PORT is Heroku
