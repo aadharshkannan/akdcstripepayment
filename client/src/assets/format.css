@@ -1,0 +1,15 @@
+.brand-logo-header{
+    height: 33%;
+    width: 33%;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+
+nav {
+    height: 100px;
+    line-height: 100px;
+}
+
+.black-text li a{
+    color: black;
+}
