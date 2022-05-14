@@ -8,7 +8,9 @@ const gUser = mongoose.model('googleUsers');
 var gOptions = {
     clientID: keys.creds.googleClientID,
     clientSecret: keys.creds.googleClientSecret,
-    callbackURL:'/auth/google/callback'
+    callbackURL:'/auth/google/callback',
+    proxy: true
+
 }
 
 passport.deserializeUser(async (id,done)=>{
