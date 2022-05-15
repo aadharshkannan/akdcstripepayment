@@ -26,6 +26,19 @@ app.use(passport.session());
 
 require('./routes/authRoutes')(app);
 
+if(process.env.NODE_ENV === "production")
+{
+  // Go into particular production asset
+  app.use(express.static('client/build'));
+
+  // Default to index.html file
+  const  path = require('path');
+  app.get('*', (req,res)=>{
+    res.sendFile(path.resolve(__dirname,'client','build','index.html'));
+  }
+  );
+}
+
 // Test env is 3000 and PORT is Heroku
 const PORT = process.env.PORT || 5000; 
 app.listen(PORT);
