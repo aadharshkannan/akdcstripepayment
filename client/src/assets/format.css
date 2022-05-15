@@ -5,6 +5,17 @@
     margin-top: 5px;
 }
 
+.login-logo-header{
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.header-color{
+    background-color: #f5b342;
+}
+
 nav {
     height: 100px;
     line-height: 100px;
@@ -13,3 +24,33 @@ nav {
 .black-text li a{
     color: black;
 }
+
+.login-creator-mode{
+    margin-right: 10px;
+    color: black;
+    font-size: medium;
+}
+
+.image-cropper {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .image-cropper img {
+    display: inline;
+    height: 100%;
+    width: auto;
+  }
+
+  .banner-image{
+      width: 40%;
+      height: auto;
+  }
+
+  .dctt-banner{
+    font-family: "Segoe UI";
+    font-size: 22pt;
+  }
