@@ -47,7 +47,7 @@ class Header extends Component{
 
         const userImg = svar.user.googleDisplayPicURL;
         
-        if(svar.auth.hasOwnProperty('authorizationString') && svar.auth.authorizationString)
+        if(svar.auth && svar.auth.authorizationString)
         {
             return this.getCreatorWithImage(userImg,"User Logo",svar.user.googleDisplayName);
         }
