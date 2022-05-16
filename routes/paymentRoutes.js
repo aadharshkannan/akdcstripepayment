@@ -5,6 +5,39 @@ const UserPaymentIntentEntry = mongoose.model('userPaymentIntentEntry');
 
 module.exports=(app,stripe)=>{
 
+    app.get('/api/payments/confirmation',
+    async (req,res)=>{
+        if(!req.user)
+        {
+         res.redirect('/askhelp');
+         return;   
+        }
+        const pi_query = req.query.payment_intent;
+        if(!pi_query)
+        {
+            res.status(400);
+            res.send("Please include Payment Intent Query Parameter");
+            return;
+        }
+        
+        const userId = req.user.googleId;
+        const paymentIntentDBEntry = await UserPaymentIntentEntry.findOne({stripePaymentIntentId:pi_query});
+
+        if(!paymentIntentDBEntry || paymentIntentDBEntry.googleId!==userId)
+        {
+            res.send({message:"Record not found"});
+            return;
+        }
+
+        res.send({stripePaymentIntentId: paymentIntentDBEntry.stripePaymentIntentId,
+            googleId: userId,
+            amount: (paymentIntentDBEntry.amount/100).toFixed(2),
+            currency:paymentIntentDBEntry.currency,
+            destWallet:paymentIntentDBEntry.destWallet,
+            })
+    }
+    );  
+
     app.post('/api/payments/intent',
     async (req,res)=>{
         

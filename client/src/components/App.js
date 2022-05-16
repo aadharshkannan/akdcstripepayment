@@ -7,8 +7,9 @@ import * as actions from '../actions';
 import Header from './Header';
 import Landing from './Landing';
 import Payments from './Payments';
+import PaymentsConfirmation from './PaymentsConfirmation';
 
-const AskHelp=()=><h2>SurveyNew</h2>;
+const AskHelp=()=><div>Please contact Aadharsh. Only he can allow you to buy this.</div>;
 
 class App extends Component{
     render(){
@@ -18,7 +19,8 @@ class App extends Component{
                     <div>
                         <Header />
                         <Route exact = {true} path="/" component={Landing} />
-                        <Route exact = {true} path="/payments" component={Payments} />
+                        <Route exact = {true} path="/payments" component={Payments} />                        
+                        <Route exact = {true} path = "/payments/confirmation" component={PaymentsConfirmation} />
                         <Route exact = {true} path="/askhelp" component={AskHelp} />
                     </div>
                 </BrowserRouter>

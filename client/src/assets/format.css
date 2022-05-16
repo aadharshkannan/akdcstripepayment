@@ -70,3 +70,17 @@ nav {
 .btn-large{
     margin-top: 10px;
 }
+
+.error-message-anywhere{
+    margin-left: 10px;
+    font-family: "Segoe UI";
+    font-size: 18pt;
+    color:#ca0b0b;
+}
+
+.transaction-success-message{
+    margin-left: 10px;
+    font-family: "Segoe UI";
+    font-size: 12pt;
+    color:#015f01;
+}
