@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const keys = require('./config/keys');
+const stripe = require('stripe')(keys.creds.stripeServerSecret);
 
 // For Google Auth
 require('./models/gUser');
 require('./models/gAuthorizedUser');
+require('./models/UserPaymentIntentEntry');
 
 // For All Auth Workflows
 require('./services/passport');
@@ -23,8 +25,10 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.json());
 
 require('./routes/authRoutes')(app);
+require('./routes/paymentRoutes')(app,stripe);
 
 if(process.env.NODE_ENV === "production")
 {

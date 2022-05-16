@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import {BrowserRouter,Route} from 'react-router-dom';
 import { connect } from 'react-redux';
+
 import * as actions from '../actions';
 
 import Header from './Header';
 import Landing from './Landing';
+import Payments from './Payments';
 
-const Payments=()=><h2>Payments</h2>;
 const AskHelp=()=><h2>SurveyNew</h2>;
 
 class App extends Component{
     render(){
         return(
-            <div className="container">
+            <div className="container">            
                 <BrowserRouter>
                     <div>
                         <Header />

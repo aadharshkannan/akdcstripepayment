@@ -6,18 +6,18 @@ import spinning from '../assets/spinning.gif';
 
 import '../assets/format.css';
 
-class Header extends Component{
-    
+class Header extends Component{    
+
     getSingleImage(srcloc,alttxt,anch=null){
 
         return(
-            <li><a href="/api/logout"><div className="image-cropper"><img alt={alttxt} src={srcloc} /></div></a></li>
+            <li key={alttxt+"1"}><a href="/api/logout"><div className="image-cropper"><img alt={alttxt} src={srcloc} /></div></a></li>
         );
     }
 
     getCreatorWithImage(srcloc,alttxt,creator){
         let buffer = [];
-        buffer.push(<li><div className="login-creator-mode">Admin Mode</div></li>);
+        buffer.push(<li key={alttxt+"2"}><div className="login-creator-mode">Admin Mode</div></li>);
         buffer.push(this.getSingleImage(srcloc,alttxt));
 
         return(buffer);

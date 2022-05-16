@@ -54,3 +54,19 @@ nav {
     font-family: "Segoe UI";
     font-size: 22pt;
   }
+
+  .payment-form-label{
+      margin-left: 10px;
+      font-family: "Segoe UI";
+      font-size: 18pt;
+      color:gray;
+  }
+  .payment-form-warning{
+    margin-left: 10px;
+    font-family: "Segoe UI";
+    font-size: 12pt;
+    color:orangered;
+}
+.btn-large{
+    margin-top: 10px;
+}
