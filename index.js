@@ -4,11 +4,14 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const keys = require('./config/keys');
 const stripe = require('stripe')(keys.creds.stripeServerSecret);
+const storeWallet = keys.creds.storeWalletAddress;
+const webHookServerSecret = keys.creds.webHookServerSecret;
 
-// For Google Auth
 require('./models/gUser');
 require('./models/gAuthorizedUser');
 require('./models/UserPaymentIntentEntry');
+require('./models/ProductSKU');
+require('./models/ShoppingPaymentEntry');
 
 // For All Auth Workflows
 require('./services/passport');
@@ -29,6 +32,7 @@ app.use(express.json());
 
 require('./routes/authRoutes')(app);
 require('./routes/paymentRoutes')(app,stripe);
+require('./routes/shoppingRoutes')(app,storeWallet,webHookServerSecret);
 
 if(process.env.NODE_ENV === "production")
 {
