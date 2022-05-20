@@ -17,8 +17,12 @@ class Shopping extends Component{
             prodIds:[],
             prodNames:[],
             prodUrls:[],
-            prodPrices:[],
+            prodPricesAKDC:[],
+            prodPricesUSDC:[],
             transactionStatus:"",
+            storeWallet:"",
+            usdcContract:"",
+            akdcContract:"",
             customerWallet:""};        
     }
 

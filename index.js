@@ -4,7 +4,10 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const keys = require('./config/keys');
 const stripe = require('stripe')(keys.creds.stripeServerSecret);
-const storeWallet = keys.creds.storeWalletAddress;
+const walletInfo = 
+  {storeWallet:keys.creds.storeWalletAddress,
+    usdcContract:keys.creds.usdcContract,
+    akdcContract:keys.creds.akdcContract};
 const webHookServerSecret = keys.creds.webHookServerSecret;
 
 require('./models/gUser');
@@ -32,7 +35,7 @@ app.use(express.json());
 
 require('./routes/authRoutes')(app);
 require('./routes/paymentRoutes')(app,stripe);
-require('./routes/shoppingRoutes')(app,storeWallet,webHookServerSecret);
+require('./routes/shoppingRoutes')(app,walletInfo,webHookServerSecret);
 
 if(process.env.NODE_ENV === "production")
 {

@@ -4,7 +4,7 @@ const ProductSKU = mongoose.model('productSKU');
 const gAuthUser = mongoose.model('googleAuthorizedUser');
 const ShopingPaymentEntry = mongoose.model('shoppingPaymentEntry');
 
-module.exports=(app,storeWallet,webHookServerSecret)=>{
+module.exports=(app,walletInfo,webHookServerSecret)=>{
 
     app.get('/api/shopping/catalog',
     async (req,res)=>{
@@ -52,7 +52,9 @@ module.exports=(app,storeWallet,webHookServerSecret)=>{
 
     app.get('/api/shopping/storewallet',
     async(req,res)=>{
-        res.send(storeWallet);
+        res.send({storeWallet:walletInfo.storeWallet,
+        usdcContract:walletInfo.usdcContract,
+        akdcContract:walletInfo.akdcContract});
     });
     
     app.post('/api/shopping/purchase',
