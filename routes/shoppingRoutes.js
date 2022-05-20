@@ -21,8 +21,6 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
         var pCount = results.length;
         var respObj = []
 
-        console.log(results[0]);
-        
         for(var i=0;i<pCount;i++)
         {
             var product = results[i];
@@ -77,17 +75,17 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
 
         var reqBody = req.Body;        
         var purchaseDBEntry = await new ShopingPaymentEntry({
-            googleId: userId,
+            googleId: userId,            
+            customerWallet:reqBody.customerWallet,
             transactionHash: reqBody.transactionHash,        
             currency:reqBody.currency,
             total: reqBody.total,
-            prodIds: reqBody.prodIds,
-            qtys:reqBody.qtys,
-            prodNames:reqBody.prodNames,
-            prodUrls: reqBody.prodUrls,
+            prodIds: reqBody.metadata.prodIds,
+            qtys:reqBody.metadata.qtys,
+            prodNames:reqBody.metadata.prodNames,
+            prodUrls: reqBody.metadata.prodUrls,
             prodPrices:reqBody.prodPrices,
-            transactionStatus:"Pending",
-            customerWallet:reqBody.customerWallet
+            transactionStatus:"Pending"
         }).save();
 
         res.send(purchaseDBEntry.transactionHash);

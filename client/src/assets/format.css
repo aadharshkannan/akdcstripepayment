@@ -84,3 +84,73 @@ nav {
     font-size: 12pt;
     color:#015f01;
 }
+
+.product {        
+    background: white;
+    margin: 16px;
+    width: 200px;
+    height: 360px;
+    border-radius: 2px;
+    vertical-align: middle;
+    text-align: center;
+    border-color: black;
+    border-style: outset;
+    border-width: 1px;
+    box-shadow: 5px 5px 2px  #f5b342;
+}
+
+.product-image{
+    max-width: 200px;
+    overflow: hidden;
+    min-height: 200px;
+}
+
+.product-image img{
+    vertical-align: middle;
+    max-height: 200px;
+}
+.product-name {
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    margin-left: 2px;
+    margin-right: 2px;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 8px;
+}
+.product-action{
+    margin-bottom: 5px;
+}
+.product-price {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 12px;
+    margin-bottom: 6px;
+}
+.product-brand,
+.product-price {
+    color: gray;
+    padding: 0 16px;
+    text-align: center;
+}
+
+.product-details{
+    vertical-align: bottom;
+}
+
+.shopping-top-label{
+    margin-top: 10px;
+    font-size: 20px;
+    font-family: "Segoe UI";
+    color:gray;
+}
+.shopping-currency-saving{
+    color: #015f01;
+    font-weight: bolder;
+}
+.shopping-top-card
+{
+    z-index: 20;
+}

@@ -4,5 +4,9 @@ module.exports = {
     googleClientSecret:process.env.GOOGLE_CLIENT_SECRET,    
     mongoURI:process.env.MONGO_URI,
     cookieKey:process.env.COOKIE_KEY,
-    stripeServerSecret:process.env.STRIPE_SERVER_SECRET
+    stripeServerSecret:process.env.STRIPE_SERVER_SECRET,
+    storeWalletAddress: process.env.STORE_WALLET_ADDRESS,
+    usdcContract: process.env.USDC_CONTRACT,
+    akdcContract: process.env.AKDC_CONTRACT,
+    webHookServerSecret: process.env.WH_SECRET
   };
