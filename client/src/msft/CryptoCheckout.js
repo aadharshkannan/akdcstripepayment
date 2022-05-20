@@ -5,6 +5,7 @@ import erc20ABI from './erc20ABI';
 import metaMaskLogo from './MetaMask_Fox.svg.png';
 import msftLogo from './msftlogo.png';
 import './cryptocheckout.css';
+import axios from "axios";
 
 class CryptoCheckout extends Component{
 
@@ -15,23 +16,51 @@ class CryptoCheckout extends Component{
         this.state = {displayState:"init",
                      txHash:"",
                      customerWallet:"",
+                     currencyIdx:0,
                      usdcContract:null,
                      akdcContract:null,
                      signer:null,
                      provider:null,
                      decimals:[]}
+
         this.renderBalance= this.renderBalance.bind(this);
         this.buttonHandler = this.buttonHandler.bind(this);
         this.acountChangeHandler = this.acountChangeHandler.bind(this);
         this.signHandler = this.signHandler.bind(this);  
+        this.radioButtonHandler = this.radioButtonHandler.bind(this);
+
+        this.usdcSelect = React.createRef();
     }
 
     async signHandler()
     {
-        let transferAmount = Math.round(this.props.totals[0]*Math.pow(10,this.state.decimals[0])) 
-        let txt = await this.state.usdcContract.transfer(this.props.storeWallet,transferAmount);
+        var idx = 1
+        var contract = this.state.akdcContract;
+
+        if(this.usdcSelect.current.checked)
+        {
+            idx = 0
+            contract = this.state.usdcContract    
+        }
+
+        let transferAmount = Math.round(this.props.totals[idx]*Math.pow(10,this.state.decimals[idx])) 
+        let txt = await contract.transfer(this.props.storeWallet,transferAmount);
+
+        let resp = await axios.post(this.props.callBack,{            
+            customerWallet:this.state.customerWallet,
+            transactionHash: txt.hash,        
+            currency:this.props.supported_currency[idx],
+            total: this.props.totals[idx],
+            prodPrices:this.props.prodPrices[idx],
+            metadata:this.props.metadata
+            },
+            {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+            });
         
-        this.setState({displayState:"signed",txHash:txt});
+        window.location = resp.redirect;
     }
 
     async buttonHandler()
@@ -66,9 +95,10 @@ class CryptoCheckout extends Component{
         let akdcBalance = await tempContractAKDC.balanceOf(newAddress);
         let usdcBalance = await tempContractUSDC.balanceOf(newAddress);
         
-        console.log(tempContractUSDC.decimals())
-        console.log(usdcBalance)
+        let akdcDecimals = await tempContractAKDC.decimals()
+        let usdcDecimals = await tempContractUSDC.decimals()
 
+        
         function redableNumber(balancenum,digitval)
         {
             let bnum = balancenum.toNumber();
@@ -84,9 +114,9 @@ class CryptoCheckout extends Component{
                 akdcContract:tempContractAKDC,
                 signer:tempSigner,
                 provider:tempProvider,
-                balances:[redableNumber(usdcBalance,6),
-                          redableNumber(akdcBalance,2)],
-                decimals:[6,2]
+                balances:[redableNumber(usdcBalance,usdcDecimals),
+                          redableNumber(akdcBalance,akdcDecimals)],
+                decimals:[usdcDecimals,akdcDecimals]
             });        
     }
 
@@ -107,6 +137,16 @@ class CryptoCheckout extends Component{
         );
     }
 
+    radioButtonHandler()
+    {
+        var idx = 1
+        if(this.usdcSelect.current.checked)
+        {
+            idx = 0    
+        }
+        this.setState({currencyIdx:idx});
+    }
+
     renderBalance()
     {
         return(
@@ -120,7 +160,7 @@ class CryptoCheckout extends Component{
                         <p>{this.state.customerWallet}</p>
                     </div>
                     <div className="card-action-from">
-                        Transferring {this.props.totals[0]} USDC
+                        Transferring {this.props.totals[this.state.currencyIdx]} {this.props.supported_currency[this.state.currencyIdx]}
                     </div>
                 </div>
                 </div>
@@ -131,7 +171,7 @@ class CryptoCheckout extends Component{
                         <p>{this.props.storeWallet}</p>
                     </div>
                     <div className="card-action-to">
-                        Receiving {this.props.totals[0]} USDC
+                        Receiving {this.props.totals[this.state.currencyIdx]}  {this.props.supported_currency[this.state.currencyIdx]}
                     </div>
                 </div>
                 </div>
@@ -139,12 +179,12 @@ class CryptoCheckout extends Component{
             </div>
             <span>
                 <label>
-                    <input className="with-gap" name="group3" type="radio" defaultChecked />
+                    <input className="with-gap" name="group3" type="radio" defaultChecked ref={this.usdcSelect} onChange = {this.radioButtonHandler}/>
                     <span>USDC (you have {this.state.balances[0]})</span>
                 </label>
                 <label>&nbsp;</label>
                 <label>
-                    <input className="with-gap" name="group5" type="radio" />
+                    <input className="with-gap" name="group3" type="radio" onChange = {this.radioButtonHandler}/>
                     <span>AKDC (you have {this.state.balances[1]})</span>
                 </label>
             </span>
@@ -172,18 +212,7 @@ class CryptoCheckout extends Component{
                 return this.renderInit();
 
             case "balance":
-                return this.renderBalance();;
-
-            case "signed":
-                return(
-                    <div className="row checkout-card-sign">
-                        <div>Transaction Complete! TxHash: {this.state.txHash}</div>
-                        <div>Will redirect you soon...</div>
-                        <div className="row">
-                            <div className="msft-logo">Powered by &nbsp;<img src={msftLogo} alt="Microsoft"></img></div>
-                        </div>  
-                    </div>
-                );    
+                return this.renderBalance();           
             
             default:
                 return(<div className="metamask-not-found">Unable to connect to Metamask</div>)

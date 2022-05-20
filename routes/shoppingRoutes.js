@@ -73,7 +73,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
 
-        var reqBody = req.Body;        
+        var reqBody = req.body;
         var purchaseDBEntry = await new ShopingPaymentEntry({
             googleId: userId,            
             customerWallet:reqBody.customerWallet,
@@ -88,7 +88,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             transactionStatus:"Pending"
         }).save();
 
-        res.send(purchaseDBEntry.transactionHash);
+        res.send({redirect:'/shopping/confirmation?txhash='.concat(purchaseDBEntry.transactionHash)});
     });
 
     app.get('/api/shopping/txstatus',
@@ -108,7 +108,10 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
         const txhash = req.query.transactionHash;
-        var txObjDB = await ShopingPaymentEntry.find({transactionHash:txhash});
+        console.log(txhash);
+        var txObjDB = await ShopingPaymentEntry.findOne({transactionHash:txhash});
+
+        console.log(txObjDB);
 
         if(txObjDB && txObjDB.googleId !== userId)
         {

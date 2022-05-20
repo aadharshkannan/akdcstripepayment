@@ -10,7 +10,7 @@ class ProductCard extends Component{
         
         const {id, sku, name, brand, img, pricing} = props.data;
 
-        const imgUrl = img.split(",");
+        const imgUrl = img.split(",")[0];
         var usdcPrice = pricing[0].price;
         var akdcPrice = pricing[1].price;
         
