@@ -151,7 +151,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             respObj.push(pendingOnes[i].transactionHash);
         }
 
-        res.send({storeWallet:storeWallet,
+        res.send({storeWallet:walletInfo.storeWallet,
         pendingTx:respObj});
         
     });
