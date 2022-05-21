@@ -9,6 +9,7 @@ import Landing from './Landing';
 import Payments from './Payments';
 import PaymentsConfirmation from './PaymentsConfirmation';
 import Shopping from './Shopping';
+import ShoppingConfirmation from './ShoppingConfirmation';
 
 const AskHelp=()=><div>Please contact Aadharsh. Only he can allow you into this site.</div>;
 
@@ -23,6 +24,7 @@ class App extends Component{
                         <Route exact = {true} path="/payments" component={Payments} />                        
                         <Route exact = {true} path = "/payments/confirmation" component={PaymentsConfirmation} />
                         <Route exact={true} path="/shopping" component={Shopping}/>
+                        <Route exact={true} path="/shopping/confirmation" component={ShoppingConfirmation}/>
                         <Route exact = {true} path="/askhelp" component={AskHelp} />
                     </div>
                 </BrowserRouter>

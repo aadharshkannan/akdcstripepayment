@@ -59,8 +59,9 @@ class CryptoCheckout extends Component{
                   'Content-Type': 'application/json'
                 }
             });
-        
-        window.location = resp.redirect;
+
+        console.log(resp);
+        window.location = resp.data.redirect;
     }
 
     async buttonHandler()

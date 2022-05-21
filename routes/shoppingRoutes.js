@@ -108,11 +108,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
         const txhash = req.query.transactionHash;
-        console.log(txhash);
         var txObjDB = await ShopingPaymentEntry.findOne({transactionHash:txhash});
-
-        console.log(txObjDB);
-
         if(txObjDB && txObjDB.googleId !== userId)
         {
             res.status(403).send("You are not permitted to view this transaction");
