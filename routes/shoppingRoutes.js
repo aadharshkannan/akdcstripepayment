@@ -109,7 +109,15 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
         }
         const txhash = req.query.transactionHash;
         var txObjDB = await ShopingPaymentEntry.findOne({transactionHash:txhash});
-        if(txObjDB && txObjDB.googleId !== userId)
+        
+        if(!txObjDB)
+        {
+            res.status(404).send("Transaction not found");
+            return;
+
+        }
+
+        if(txObjDB.googleId !== userId)
         {
             res.status(403).send("You are not permitted to view this transaction");
             return;
@@ -201,12 +209,20 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
 
-        var completedTxs = req.Body;
+        var completedTxs = req.body;
+        var completionCount = completedTxs.length 
 
-        for(var tx in completedTxs)
+        for(var i=0;i<completionCount;i++)        
         {
-            var record = ShopingPaymentEntry.findOne({transactionHash:tx.transactionHash});
-            await record.overwrite({transactionStatus:tx.status,finalityBlock:tx.block}).save();
+            tx = completedTxs[i]
+            var record = await ShopingPaymentEntry.findOne({transactionHash:tx.transactionHash});
+            
+            if(record)
+            {
+                record.transactionStatus = tx.status;
+                record.finalityBlock = tx.block;
+                await record.save();
+            }            
         }
 
         res.send("Success!");
