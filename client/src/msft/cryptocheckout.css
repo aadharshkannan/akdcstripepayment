@@ -6,15 +6,18 @@
     color: brown;
 }
 .metamask-logo img{
-    width: 300 px;
+    width: 350px;
+    height: auto;
 }
 .crypto-payment-header{
     margin-top: 10px;
+    text-align: center;
 }
 .msft-logo img{
     width: 100px;
     height: auto;
     vertical-align: middle;
+    text-align: right;
 }
 
 .checkout-card-sign{
@@ -30,4 +33,25 @@
     margin-left: 20px;
     font-size: larger;
     color:chartreuse;
+}
+
+.curr-logo{
+    width: 40px;
+    height: 40px;
+}
+
+.currency-list img{
+    vertical-align: middle;
+}
+
+.currency-action{
+    margin-top: 40px;
+}
+
+.curr-chicklet{
+    margin-right: 10px;
+}
+
+.msft-branding{
+    float: right;
 }

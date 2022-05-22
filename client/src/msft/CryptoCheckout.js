@@ -4,6 +4,9 @@ import {ethers} from "ethers"
 import erc20ABI from './erc20ABI';
 import metaMaskLogo from './MetaMask_Fox.svg.png';
 import msftLogo from './msftlogo.png';
+import akdcLogo from './ak-dc.png';
+import usdcLogo from './usdc-logo.png'
+import cbdcLogo from './cbdc-logo.png'
 import './cryptocheckout.css';
 import axios from "axios";
 
@@ -178,18 +181,22 @@ class CryptoCheckout extends Component{
                 </div>
                 
             </div>
-            <span>
+            <span className="currency-list">
                 <label>
                     <input className="with-gap" name="group3" type="radio" defaultChecked ref={this.usdcSelect} onChange = {this.radioButtonHandler}/>
-                    <span>USDC (you have {this.state.balances[0]})</span>
+                    <span className="curr-chicklet"><img className="curr-logo" src={usdcLogo} alt="usdc-logo"></img> USDC (you have {this.state.balances[0]})</span>
                 </label>
                 <label>&nbsp;</label>
                 <label>
                     <input className="with-gap" name="group3" type="radio" onChange = {this.radioButtonHandler}/>
-                    <span>AKDC (you have {this.state.balances[1]})</span>
+                    <span className="curr-chicklet"><img className="curr-logo" src={akdcLogo} alt="akdc-logo"></img> AKDC (you have {this.state.balances[1]})</span>
+                </label>
+                <label>
+                    <input className="with-gap" name="group5" type="radio" disabled={true}/>
+                    <span className="curr-chicklet"><img className="curr-logo" src={cbdcLogo} alt="akdc-logo"></img> CBDC (Coming Soon)</span>
                 </label>
             </span>
-            <div className="row">
+            <div className="row currency-action">
                 <button className="btn waves-effect waves-light btn-small" 
                         type="button" 
                         name="action"
@@ -198,8 +205,8 @@ class CryptoCheckout extends Component{
                 </button>
             </div>
 
-            <div className="row">
-                <div className="msft-logo">Powered by &nbsp;<img src={msftLogo} alt="Microsoft"></img></div>
+            <div className="row msft-branding">
+                <span className="msft-logo">Powered by &nbsp;<img src={msftLogo} alt="Microsoft"></img></span>
             </div>            
         </div>
         );
