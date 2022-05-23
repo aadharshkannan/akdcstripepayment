@@ -209,20 +209,27 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
 
-        var completedTxs = req.body;
-        var completionCount = completedTxs.length 
-
-        for(var i=0;i<completionCount;i++)        
+        try
         {
-            tx = completedTxs[i]
-            var record = await ShopingPaymentEntry.findOne({transactionHash:tx.transactionHash});
-            
-            if(record)
+            var completedTxs = req.body;
+            var completionCount = completedTxs.length 
+    
+            for(var i=0;i<completionCount;i++)        
             {
-                record.transactionStatus = tx.status;
-                record.finalityBlock = tx.block;
-                await record.save();
-            }            
+                tx = completedTxs[i]
+                var record = await ShopingPaymentEntry.findOne({transactionHash:tx.transactionHash});
+                
+                if(record)
+                {
+                    record.transactionStatus = tx.status;
+                    record.finalityBlock = tx.block;
+                    await record.save();
+                }            
+            }
+        }
+        catch(e)
+        {
+            res.status(400).send("Bad Request");
         }
 
         res.send("Success!");
