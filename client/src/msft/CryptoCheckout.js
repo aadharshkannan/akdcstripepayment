@@ -158,8 +158,8 @@ class CryptoCheckout extends Component{
             
             <div className="row">
                 <div className="col s12 m6">
-                <div className="card blue-grey darken-1">
-                    <div className="card-content white-text">
+                <div className="card">
+                    <div className="card-content">
                     <span className="card-title">Your Address</span>
                         <p>{this.state.customerWallet}</p>
                     </div>
@@ -169,8 +169,8 @@ class CryptoCheckout extends Component{
                 </div>
                 </div>
                 <div className="col s12 m6">
-                <div className="card blue-grey darken-1">
-                    <div className="card-content white-text">
+                <div className="card">
+                    <div className="card-content">
                     <span className="card-title">Store Address</span>
                         <p>{this.props.storeWallet}</p>
                     </div>

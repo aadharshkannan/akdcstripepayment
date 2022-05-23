@@ -6,8 +6,8 @@
     color: brown;
 }
 .metamask-logo img{
-    width: 350px;
-    height: auto;
+    width: auto;
+    height: 180px;
 }
 .crypto-payment-header{
     margin-top: 10px;
@@ -24,15 +24,19 @@
     margin-top: 20px;
 }
 
+.card{
+    background-color: #f5f7f8;
+}
+
 .card-action-from{
     margin-left: 20px;
     font-size: larger;
-    color: coral;
+    color: rgb(241, 84, 26);
 }
 .card-action-to{
     margin-left: 20px;
     font-size: larger;
-    color:chartreuse;
+    color:rgb(85, 156, 13);
 }
 
 .curr-logo{

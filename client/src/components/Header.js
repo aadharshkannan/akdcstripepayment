@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import { connect } from "react-redux";
 import currlogo from '../assets/AKDCLogo.png';
+import currTagline from '../assets/AKDCTagline.png'
 import glogo from '../assets/GLogo.png';
 import spinning from '../assets/spinning.gif';
 
@@ -58,7 +59,8 @@ class Header extends Component{
         return(
             <nav className="header-color black-text">
                 <div className="nav-wrapper">
-                <a href="/" className="brand-logo left"><img alt="AKDC logo" className="brand-logo-header" src={currlogo}/></a>
+                <a href="/" className="brand-logo left"><span><img alt="AKDC logo" className="brand-logo-header" src={currlogo}/>
+                <img alt="AKDC Tagline" className="brand-logo-header-tagline" src={currTagline}></img></span></a>
                 <ul className="right hide-on-med-and-down">
                     {this.renderContent()}
                 </ul>

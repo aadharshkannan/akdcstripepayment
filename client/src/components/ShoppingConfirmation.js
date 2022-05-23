@@ -50,7 +50,7 @@ class ShoppingConfirmation extends Component{
 
         if(data.transactionStatus === "Pending")
         {
-           this.interval = setInterval(() => this.tick(), 1000);
+           this.interval = setInterval(() => this.tick(), 10000);
         }
 
         this.setState(stateData);
