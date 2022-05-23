@@ -230,6 +230,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
         catch(e)
         {
             res.status(400).send("Bad Request");
+            return
         }
 
         res.send("Success!");
