@@ -24,11 +24,13 @@ class Payments extends Component{
 
     handleAmountChange(event){
         
-        this.labRef.current.innerText=event.target.value;
-        this.akdcRef.current.innerText = (event.target.value*1.0/10.0).toFixed(2);
+        var amount = +((event.target.value/10.0).toFixed(2))
+
+        this.labRef.current.innerText=amount;        
+        this.akdcRef.current.innerText =amount;
         
         this.setState({walletAddress:this.state.walletAddress,
-            amount:event.target.value,
+            amount:amount,
             paymentState:'unsubmitted'});
 
     }
@@ -105,9 +107,9 @@ class Payments extends Component{
                                 </div>                
                             </div>
                             <div className="row">
-                                <div className="payment-form-label">Amount $<span ref={this.labRef}>20</span> gives you <span ref={this.akdcRef}>2.00</span> AKDCs</div>  
+                                <div className="payment-form-label">Amount $<span ref={this.labRef}>20.00</span> gives you <span ref={this.akdcRef}>20.00</span> AKDCs</div>  
                                 <div className="input-field col s6">                    
-                                    <input ref={this.amtRef} type="range" min="10" max="100" defaultValue="20" onChange={this.handleAmountChange}/>                 
+                                    <input ref={this.amtRef} type="range" min="100" max="1000" defaultValue="200" onChange={this.handleAmountChange}/>                 
                                 </div>                
                             </div>
                             <button className="btn waves-effect waves-light btn-large" type="button" name="action" onClick={this.handleSubmit}><span>Buy</span>

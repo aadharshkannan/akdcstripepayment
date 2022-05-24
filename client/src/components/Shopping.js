@@ -100,8 +100,7 @@ class Shopping extends Component{
         var ak = this.state.totals[1]
         var us = this.state.totals[0]
 
-        var aku = ak*10
-        var sav = (us-aku).toFixed(2);
+        var sav = +((us-ak).toFixed(2));
         var savp = Math.round(sav*100/(us+0.001));
 
         var itemCnt = this.state.catalog.length;

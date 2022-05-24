@@ -5,7 +5,7 @@ const sampleProducts = require('./sampleProducts');
 
 require('../models/ProductSKU');
 
-mongoose.connect(process.env.MONGO_URI_PROD);
+mongoose.connect(process.env.MONGO_URI_DEV);
 const ProductSKU = mongoose.model('productSKU');
 
 console.log(sampleProducts.length)
