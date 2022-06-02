@@ -48,6 +48,7 @@ class Shopping extends Component{
                 storeWallet:addresses.data.storeWallet,
                 usdcContract:addresses.data.usdcContract,
                 akdcContract:addresses.data.akdcContract,
+                gsn:addresses.data.gsn,
                 catalog: catalog.data
             });
     }
@@ -165,6 +166,7 @@ class Shopping extends Component{
         //these not needed in a final implementation
         var usdcContract = this.state.usdcContract;
         var akdcContract=this.state.akdcContract;
+        var gsn = this.state.gsn;
 
         return(<CryptoCheckout metadata={metadata}
             prodPrices = {prodPrices}
@@ -173,6 +175,7 @@ class Shopping extends Component{
             storeWallet = {storeWallet}
             usdcContract = {usdcContract}
             akdcContract = {akdcContract}
+            gsn={gsn}
             callBack = "/api/shopping/purchase"
             ></CryptoCheckout>)
     }

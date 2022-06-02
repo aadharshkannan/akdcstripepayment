@@ -7,8 +7,10 @@ import msftLogo from './msftlogo.png';
 import akdcLogo from './ak-dc.png';
 import usdcLogo from './usdc-logo.png'
 import cbdcLogo from './cbdc-logo.png'
+import gsnLogo from './gsn-logo.png';
 import './cryptocheckout.css';
 import axios from "axios";
+import detectEthereumProvider from '@metamask/detect-provider';
 
 class CryptoCheckout extends Component{
 
@@ -20,6 +22,7 @@ class CryptoCheckout extends Component{
                      txHash:"",
                      customerWallet:"",
                      currencyIdx:0,
+                     chain:"",
                      usdcContract:null,
                      akdcContract:null,
                      signer:null,
@@ -31,6 +34,9 @@ class CryptoCheckout extends Component{
         this.acountChangeHandler = this.acountChangeHandler.bind(this);
         this.signHandler = this.signHandler.bind(this);  
         this.radioButtonHandler = this.radioButtonHandler.bind(this);
+
+        this.acountChangeHandlerGSN = this.acountChangeHandlerGSN.bind(this);
+        this.signHandlerGSN = this.signHandlerGSN.bind(this);
 
         this.usdcSelect = React.createRef();
     }
@@ -71,26 +77,85 @@ class CryptoCheckout extends Component{
     {
         try 
         {
+           await detectEthereumProvider();
+           
            // Request account access
            if(!window.ethereum)
            {
                throw new Error("Metamask not founr");
            }
-           
-           window.ethereum.on('accountsChanged',
-           (accounts)=>{this.acountChangeHandler(accounts[0])} 
-           );
 
-           window.ethereum.request({method:'eth_requestAccounts'})
-           .then(result=>{
-               this.acountChangeHandler(result[0]);
-           });                     
+           window.ethereum.on('chainChanged', (chainid)=>{this.buttonHandler()});
+
+           const chainId =  parseInt(await window.ethereum.request({ method: 'eth_chainId' }));
+
+           console.log(chainId)
+           
+           if(chainId === 5 || chainId === 3)
+           {
+                window.ethereum.on('accountsChanged',
+                (accounts)=>{this.acountChangeHandler(accounts[0])} 
+                );
+    
+                window.ethereum.request({method:'eth_requestAccounts'})
+                .then(result=>{
+                    this.acountChangeHandler(result[0]);
+                });
+           }
+           else
+           {
+            window.ethereum.on('accountsChanged',
+            (accounts)=>{this.acountChangeHandlerGSN(accounts[0])} 
+            );
+
+            window.ethereum.request({method:'eth_requestAccounts'})
+            .then(result=>{
+                this.acountChangeHandlerGSN(result[0]);
+            });
+           }                                
         } 
         catch(e) 
         {
             this.setState({displayState:"No Metamask"}); 
             return
         }
+    }
+
+    async acountChangeHandlerGSN(newAddress){
+        let tempProvider = new ethers.providers.Web3Provider(window.ethereum);
+        let tempSigner = tempProvider.getSigner();
+        let tempContractAKDC = new ethers.Contract(this.props.gsn.contract,
+            erc20ABI,
+            tempSigner);
+        
+        let akdcBalance = await tempContractAKDC.balanceOf(newAddress);
+        let akdcDecimals = await tempContractAKDC.decimals()        
+        
+        function redableNumber(balancenum,digitval)
+        {
+            let bnum = balancenum.toNumber();
+            let tkbal = bnum/Math.pow(10,digitval);
+            return +(tkbal.toFixed(2))
+        }
+
+        this.setState(
+            {
+                displayState:"balance",
+                customerWallet:newAddress,
+                usdcContract:null,
+                akdcContract:tempContractAKDC,
+                chain:"polygon",
+                currencyIdx:1,
+                signer:tempSigner,
+                provider:tempProvider,
+                balances:[0,
+                          redableNumber(akdcBalance,akdcDecimals)],
+                decimals:[1,akdcDecimals]
+            });  
+    }
+
+    async signHandlerGSN(){
+
     }
 
     async acountChangeHandler(newAddress){
@@ -124,6 +189,7 @@ class CryptoCheckout extends Component{
                 customerWallet:newAddress,
                 usdcContract:tempContractUSDC,
                 akdcContract:tempContractAKDC,
+                chain:"ethereum",
                 signer:tempSigner,
                 provider:tempProvider,
                 balances:[redableNumber(usdcBalance,usdcDecimals),
@@ -161,6 +227,15 @@ class CryptoCheckout extends Component{
 
     renderBalance()
     {
+        const chainStyleLabel = `chain-style-${this.state.chain}`
+        const chainStyleGSNLogo = `chain-style-gsn-${this.state.chain}`
+
+        var sighHandFn = this.signHandler
+        if(this.state.chain=="polygon")
+        {
+            sighHandFn = this.signHandlerGSN;
+        }
+
         return(
         <div className="row checkout-card-sign">
             
@@ -190,7 +265,7 @@ class CryptoCheckout extends Component{
                 
             </div>
             <span className="currency-list">
-                <label>
+                <label className={chainStyleLabel}>
                     <input className="with-gap" name="group3" type="radio" defaultChecked ref={this.usdcSelect} onChange = {this.radioButtonHandler}/>
                     <span className="curr-chicklet"><img className="curr-logo" src={usdcLogo} alt="usdc-logo"></img> USDC (you have {this.state.balances[0]})</span>
                 </label>
@@ -201,20 +276,20 @@ class CryptoCheckout extends Component{
                 </label>
                 <label>
                     <input className="with-gap" name="group5" type="radio" disabled={true}/>
-                    <span className="curr-chicklet"><img className="curr-logo" src={cbdcLogo} alt="akdc-logo"></img> CBDC (Coming Soon)</span>
+                    <span className="curr-chicklet"><img className="curr-logo" src={cbdcLogo} alt="cbdc-logo"></img> CBDC (Coming Soon)</span>
                 </label>
             </span>
             <div className="row currency-action">
                 <button className="btn waves-effect waves-light btn-small" 
                         type="button" 
                         name="action"
-                        onClick={this.signHandler}>
+                        onClick={sighHandFn}>
                         Sign   
                 </button>
             </div>
 
             <div className="row msft-branding">
-                <span className="msft-logo">Powered by &nbsp;<img src={msftLogo} alt="Microsoft"></img></span>
+                <span className="msft-logo">Powered by &nbsp;<img src={msftLogo} alt="Microsoft"></img></span><span className={chainStyleGSNLogo}> and <img alt="gsn" src={gsnLogo}></img></span>
             </div>            
         </div>
         );

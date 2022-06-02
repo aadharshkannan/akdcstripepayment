@@ -59,3 +59,17 @@
 .msft-branding{
     float: right;
 }
+
+.chain-style-polygon{
+    display: none;
+}
+
+.chain-style-gsn-ethereum{
+    display: none;
+}
+
+.chain-style-gsn-polygon img{
+    height: 40px;
+    vertical-align: middle;
+    text-align: right;
+}

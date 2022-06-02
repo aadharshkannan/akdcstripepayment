@@ -53,7 +53,8 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
     async(req,res)=>{
         res.send({storeWallet:walletInfo.storeWallet,
         usdcContract:walletInfo.usdcContract,
-        akdcContract:walletInfo.akdcContract});
+        akdcContract:walletInfo.akdcContract,
+        gsn:walletInfo.gsn});
     });
     
     app.post('/api/shopping/purchase',
