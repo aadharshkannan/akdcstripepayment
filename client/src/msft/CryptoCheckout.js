@@ -71,12 +71,20 @@ class CryptoCheckout extends Component{
     {
         try 
         {
-            // Request account access
-            await window.ethereum.enable();
-            window.ethereum.request({method:'eth_requestAccounts'})
-            .then(result=>{
-                this.acountChangeHandler(result[0]);
-            })            
+           // Request account access
+           if(!window.ethereum)
+           {
+               throw new Error("Metamask not founr");
+           }
+           
+           window.ethereum.on('accountsChanged',
+           (accounts)=>{this.acountChangeHandler(accounts[0])} 
+           );
+
+           window.ethereum.request({method:'eth_requestAccounts'})
+           .then(result=>{
+               this.acountChangeHandler(result[0]);
+           });                     
         } 
         catch(e) 
         {

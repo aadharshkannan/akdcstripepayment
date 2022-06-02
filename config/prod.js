@@ -8,5 +8,8 @@ module.exports = {
     storeWalletAddress: process.env.STORE_WALLET_ADDRESS,
     usdcContract: process.env.USDC_CONTRACT,
     akdcContract: process.env.AKDC_CONTRACT,
+    akdcGSNContract:process.env.AKDC_GSN_CONTRACT,
+    gsnPayMaster:process.env.GSN_PAYMASTER,
+    preferredRelay:process.env.PREFERRED_RELAY,    
     webHookServerSecret: process.env.WH_SECRET
   };

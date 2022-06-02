@@ -7,7 +7,12 @@ const stripe = require('stripe')(keys.creds.stripeServerSecret);
 const walletInfo = 
   {storeWallet:keys.creds.storeWalletAddress,
     usdcContract:keys.creds.usdcContract,
-    akdcContract:keys.creds.akdcContract};
+    akdcContract:keys.creds.akdcContract,
+    gsn:{
+      contract:keys.creds.akdcGSNContract,
+      payMaster:keys.creds.gsnPayMaster,
+      preferredRelay:keys.creds.preferredRelay,
+    }};
 const webHookServerSecret = keys.creds.webHookServerSecret;
 
 require('./models/gUser');
