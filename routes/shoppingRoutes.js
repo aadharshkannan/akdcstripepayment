@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const ProductSKU = mongoose.model('productSKU');
 const gAuthUser = mongoose.model('googleAuthorizedUser');
 const ShopingPaymentEntry = mongoose.model('shoppingPaymentEntry');
+const default_chain = "ethereum";
 
 module.exports=(app,walletInfo,webHookServerSecret)=>{
 
@@ -74,6 +75,12 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
         }
 
         var reqBody = req.body;
+        var chain = default_chain
+        if(reqBody.chain)
+        {
+            chain = reqBody.chain;
+        }
+
         var purchaseDBEntry = await new ShopingPaymentEntry({
             googleId: userId,            
             customerWallet:reqBody.customerWallet,
@@ -85,6 +92,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             prodNames:reqBody.metadata.prodNames,
             prodUrls: reqBody.metadata.prodUrls,
             prodPrices:reqBody.prodPrices,
+            chain:chain,
             transactionStatus:"Pending"
         }).save();
 
@@ -98,6 +106,12 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
          res.redirect('/askhelp');
          return;   
         }
+        
+        var chain = default_chain
+        if(req.query.chain)
+        {
+            chain = req.query.chain
+        }
 
         const userId = req.user.googleId;
         const gAuthUserObj = await gAuthUser.findOne({googleId:userId });
@@ -108,7 +122,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
         const txhash = req.query.transactionHash;
-        var txObjDB = await ShopingPaymentEntry.findOne({transactionHash:txhash});
+        var txObjDB = await ShopingPaymentEntry.findOne({transactionHash:txhash,chain:chain});
         
         if(!txObjDB)
         {
@@ -125,7 +139,8 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
 
         res.send({
             googleId: txObjDB.googleId,
-            transactionHash: txObjDB.transactionHash,        
+            transactionHash: txObjDB.transactionHash,
+            chain:txObjDB.chain,        
             currency:txObjDB.currency,
             total: txObjDB.total,
             prodIds: txObjDB.prodIds,
@@ -133,6 +148,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             prodNames:txObjDB.prodNames,
             prodUrls: txObjDB.prodUrls,
             prodPrices:txObjDB.prodPrices,
+            chain:txObjDB.chain,
             transactionStatus:txObjDB.transactionStatus,
             customerWallet:txObjDB.customerWallet
         });
@@ -149,7 +165,13 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
 
-        var pendingOnes = await ShopingPaymentEntry.find({transactionStatus:"Pending"});
+        var chain = default_chain
+        if(req.query.chain)
+        {
+            chain = req.query.chain
+        }
+
+        var pendingOnes = await ShopingPaymentEntry.find({transactionStatus:"Pending",chain:chain});
 
         var respObj = [];
         var pendCount = pendingOnes.length;
@@ -192,6 +214,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             respObj.push(
                 {
                     transactionHash: mytxs[i].transactionHash,
+                    transactionChain: mytxs[i].chain,
                     transactionStatus: mytxs[i].transactionStatus
                 });
         }
@@ -209,6 +232,12 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             return;
         }
 
+        var chain = default_chain
+        if(req.query.chain)
+        {
+            chain = req.query.chain
+        }
+
         try
         {
             var completedTxs = req.body;
@@ -217,7 +246,7 @@ module.exports=(app,walletInfo,webHookServerSecret)=>{
             for(var i=0;i<completionCount;i++)        
             {
                 tx = completedTxs[i]
-                var record = await ShopingPaymentEntry.findOne({transactionHash:tx.transactionHash});
+                var record = await ShopingPaymentEntry.findOne({transactionHash:tx.transactionHash,chain:chain});
                 
                 if(record)
                 {

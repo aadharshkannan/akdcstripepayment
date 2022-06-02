@@ -12,6 +12,7 @@ const ShoppingPaymentEntry = new Schema({
     prodNames:[String],
     prodUrls:[String],
     prodPrices:[Number],
+    chain:String,
     transactionStatus:String,
     finalityBlock:String,
     customerWallet:String
