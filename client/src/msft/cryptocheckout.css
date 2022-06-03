@@ -52,6 +52,23 @@
     margin-top: 40px;
 }
 
+.currency-inaction{
+    display: none;
+}
+
+.sign-loading-action{
+    display: none;
+}
+
+.sign-loading-inaction{
+    margin-top: 40px;
+    vertical-align: middle;
+}
+
+.sign-loading-inaction img{
+    width: 40px;
+    vertical-align: middle;
+}
 .curr-chicklet{
     margin-right: 10px;
 }

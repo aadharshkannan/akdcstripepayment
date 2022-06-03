@@ -12,9 +12,11 @@ class ShoppingConfirmation extends Component{
         
         var qPM = new URLSearchParams(this.props.location.search);
         var txH = qPM.get('txhash')
+        var chain = qPM.get('chain')
         
         this.state = {displayState:"loading",
                      transactionStatus:txH,
+                     chain:chain,
                      customerWallet:"",
                      transactionHash:"",
                      currency:"",
@@ -72,9 +74,13 @@ class ShoppingConfirmation extends Component{
     async getTxHDetails()
     {
         var qPM = new URLSearchParams(this.props.location.search);
-        var txH = qPM.get('txhash')
+        var txH = qPM.get('txhash')        
+        var chain = qPM.get('chain')
 
         var getS =  `/api/shopping/txstatus?transactionHash=${txH}`;
+        if(chain){
+            getS = `${getS}&chain=${chain}`
+        }
         var resp = await axios.get(getS);
 
         return resp.data;
