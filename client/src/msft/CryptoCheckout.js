@@ -41,6 +41,7 @@ class CryptoCheckout extends Component{
         this.signHandlerGSN = this.signHandlerGSN.bind(this);
 
         this.usdcSelect = React.createRef();
+        this.akdcSelect = React.createRef();
     }
 
     async buttonHandler()
@@ -273,7 +274,13 @@ class CryptoCheckout extends Component{
 
         var btnClassName = "row currency-action"
         var loadingClassName = "sign-loading-action"
-        var akdcChecked = false
+        var akdcChecked = false;
+
+        if(this.akdcSelect.current)
+        {
+            akdcChecked = this.akdcSelect.current.checked
+        }
+
         if(inProgress)
         {
             btnClassName = "row currency-inaction"
@@ -322,7 +329,7 @@ class CryptoCheckout extends Component{
                 </label>
                 <label>&nbsp;</label>
                 <label>
-                    <input className="with-gap" name="group3" type="radio" onChange = {this.radioButtonHandler} checked={akdcChecked}/>
+                    <input className="with-gap" name="group3" type="radio" onChange = {this.radioButtonHandler} ref={this.akdcSelect} checked={akdcChecked}/>
                     <span className="curr-chicklet"><img className="curr-logo" src={akdcLogo} alt="akdc-logo"></img> AKDC (you have {this.state.balances[1]})</span>
                 </label>
                 <label>
