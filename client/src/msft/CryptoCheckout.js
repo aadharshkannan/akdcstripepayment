@@ -1,15 +1,15 @@
 import React,{Component} from "react";
 import { connect } from "react-redux";
 import {ethers} from "ethers"
-import erc20ABI from './erc20ABI';
-import metaMaskLogo from './MetaMask_Fox.svg.png';
-import msftLogo from './msftlogo.png';
-import akdcLogo from './ak-dc.png';
-import usdcLogo from './usdc-logo.png'
-import cbdcLogo from './cbdc-logo.png'
-import gsnLogo from './gsn-logo.png';
-import loadingLogo from './loading.gif'
-import './cryptocheckout.css';
+import erc20ABI from './abi/erc20ABI';
+import metaMaskLogo from './assets/MetaMask_Fox.svg.png';
+import msftLogo from './assets/msftlogo.png';
+import akdcLogo from './assets/ak-dc.png';
+import usdcLogo from './assets/usdc-logo.png'
+import cbdcLogo from './assets/cbdc-logo.png'
+import gsnLogo from './assets/gsn-logo.png';
+import loadingLogo from './assets/loading.gif'
+import './assets/cryptocheckout.css';
 import axios from "axios";
 import detectEthereumProvider from '@metamask/detect-provider';
 import {RelayProvider} from '@opengsn/provider';

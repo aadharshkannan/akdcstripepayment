@@ -10,6 +10,7 @@ import Payments from './Payments';
 import PaymentsConfirmation from './PaymentsConfirmation';
 import Shopping from './Shopping';
 import ShoppingConfirmation from './ShoppingConfirmation';
+import CryptoInterchange from './CryptoInterchange';
 
 const AskHelp=()=><div>Please contact Aadharsh. Only he can allow you into this site.</div>;
 
@@ -26,6 +27,7 @@ class App extends Component{
                         <Route exact={true} path="/shopping" component={Shopping}/>
                         <Route exact={true} path="/shopping/confirmation" component={ShoppingConfirmation}/>
                         <Route exact = {true} path="/askhelp" component={AskHelp} />
+                        <Route exact = {true} path="/convert" component={CryptoInterchange} />
                     </div>
                 </BrowserRouter>
             </div>

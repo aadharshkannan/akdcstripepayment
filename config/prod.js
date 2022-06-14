@@ -11,5 +11,6 @@ module.exports = {
     akdcGSNContract:process.env.AKDC_GSN_CONTRACT,
     gsnPayMaster:process.env.GSN_PAYMASTER,
     preferredRelay:process.env.PREFERRED_RELAY,    
-    webHookServerSecret: process.env.WH_SECRET
+    webHookServerSecret: process.env.WH_SECRET,
+    emitAndTransferContract: process.env.EMIT_TRANSFER_ADDRESS
   };

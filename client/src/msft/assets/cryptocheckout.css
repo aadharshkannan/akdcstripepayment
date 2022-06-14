@@ -73,6 +73,14 @@
     margin-right: 10px;
 }
 
+.curr-in-swap{
+    margin-left: 10px;
+}
+
+.swap-chicklet span{
+    vertical-align: top;
+}
+
 .msft-branding{
     float: right;
 }
@@ -89,4 +97,21 @@
     height: 40px;
     vertical-align: middle;
     text-align: right;
+}
+
+.poly-logo img{
+    width: 60px;
+    height: auto;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.sol-logo img{
+    width: 60px;
+    height: auto;
+    vertical-align: middle;
+    text-align: right;
+}
+.to-logo{
+    font-size: x-large;
 }

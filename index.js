@@ -4,15 +4,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const keys = require('./config/keys');
 const stripe = require('stripe')(keys.creds.stripeServerSecret);
-const walletInfo = 
-  {storeWallet:keys.creds.storeWalletAddress,
-    usdcContract:keys.creds.usdcContract,
-    akdcContract:keys.creds.akdcContract,
-    gsn:{
-      contract:keys.creds.akdcGSNContract,
-      payMaster:keys.creds.gsnPayMaster,
-      preferredRelay:keys.creds.preferredRelay,
-    }};
+const walletInfo = require('./walletinfo');
 const webHookServerSecret = keys.creds.webHookServerSecret;
 
 require('./models/gUser');
