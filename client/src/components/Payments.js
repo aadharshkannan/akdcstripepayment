@@ -100,7 +100,7 @@ class Payments extends Component{
                         <div ref={this.formSectionRef}>                    
                             <form className="col s12">
                             <div className="row">
-                                <div className="payment-form-label">Destination Wallet Address (Ropsten)</div>  
+                                <div className="payment-form-label">Destination Wallet Address (Goerli)</div>  
                                 <div className="payment-form-warning">Please verify carefully. Currency is lost in case of typographic errors.</div>
                                 <div className="input-field col s6">                    
                                 <input ref={this.wallRef} id="wallet_address" type="text" className="validate" onChange={this.handleTextChange}/>                  

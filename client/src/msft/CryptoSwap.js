@@ -13,7 +13,6 @@ import polygonLogo from './assets/polygon-matic-logo.png'
 import solLogo from './assets/solana-sol-logo.png'
 
 import './assets/cryptocheckout.css';
-import axios from "axios";
 import detectEthereumProvider from '@metamask/detect-provider';
 
 class CryptoSwap extends Component{
@@ -27,14 +26,24 @@ class CryptoSwap extends Component{
                      decimal:-1,
                      txHash:"",
                      customerWallet:"",
+                     walletAddress:"",
+                     currencyContract:null,
+                     emitContract:null,
+                     amount:-1,
                      allowance:0,
                      signer:null,
                      provider:null}
 
+        this.akdcRef = React.createRef();
+                            
         this.renderBalance= this.renderBalance.bind(this);
+        this.renderComplete = this.renderComplete.bind(this);
         this.buttonHandler = this.buttonHandler.bind(this);
         this.acountChangeHandler = this.acountChangeHandler.bind(this);
-        this.signHandler = this.signHandler.bind(this);
+        this.handleAmountChange = this.handleAmountChange.bind(this);
+        this.handleTextChange = this.handleTextChange.bind(this);   
+
+        this.authorizeHandler = this.authorizeHandler.bind(this);
         this.signHandlerConvert = this.signHandlerConvert.bind(this);                          
     }
 
@@ -77,10 +86,7 @@ class CryptoSwap extends Component{
         }
     }
 
-    signHandlerConvert()
-    {
-
-    }
+   
 
     readableNumber(balancenum,digitval)
     {
@@ -96,6 +102,9 @@ class CryptoSwap extends Component{
         let tempContractAKDC = new ethers.Contract(this.props.swap.currencyContract,
             erc20ABI,
             tempSigner);
+        let tempEmitContract = new ethers.Contract(this.props.swap.emitAndTransferContract,
+            emitContractABI.abi,
+            tempSigner)
         
         let akdcBalance = await tempContractAKDC.balanceOf(newAddress);        
         let akdcDecimals = await tempContractAKDC.decimals();
@@ -108,42 +117,31 @@ class CryptoSwap extends Component{
                 customerWallet:newAddress,
                 balance:akdcBalance,
                 signer:tempSigner,
+                currencyContract:tempContractAKDC,
+                emitContract:tempEmitContract,
                 provider:tempProvider,
                 decimal:akdcDecimals,
                 allowance:allowance
             });        
     }   
 
-    async signHandler()
+    async authorizeHandler()
     {
-        var idx = 1
-        var contract = this.state.akdcContract;
+        var transferAmt = this.state.amount*Math.pow(10,this.state.decimal);
+        await this.state.currencyContract.approve(this.props.swap.emitAndTransferContract,
+            transferAmt);
 
-        if(this.usdcSelect.current.checked)
-        {
-            idx = 0
-            contract = this.state.usdcContract    
-        }
+        this.setState({displayState:"balance"});
+    }
 
-        let transferAmount = Math.round(this.props.totals[idx]*Math.pow(10,this.state.decimals[idx])) 
-        let txt = await contract.transfer(this.props.storeWallet,transferAmount);
-
-        let resp = await axios.post(this.props.callBack,{            
-            customerWallet:this.state.customerWallet,
-            transactionHash: txt.hash,        
-            currency:this.props.supported_currency[idx],
-            total: this.props.totals[idx],
-            prodPrices:this.props.prodPrices[idx],
-            metadata:this.props.metadata
-            },
-            {
-                headers: {
-                  'Content-Type': 'application/json'
-                }
-            });
-
-        console.log(resp);
-        window.location = resp.data.redirect;
+    async signHandlerConvert()
+    {
+        var transferAmt = this.state.amount*Math.pow(10,this.state.decimal);
+        var tx = await this.state.emitContract.registerTransfer(this.state.walletAddress,
+            transferAmt)
+        
+        this.setState({displayState:"completed",
+        txHash:tx.hash});
     }
    
     renderInit()
@@ -162,18 +160,44 @@ class CryptoSwap extends Component{
         );
     }
 
+    handleAmountChange(event){
+        
+        var amount = +((event.target.value/10.0).toFixed(2))
+
+        this.akdcRef.current.innerText =amount;
+        
+        this.setState({amount:amount});
+
+    }
+
+    handleTextChange(event){
+        console.log(event.target.value)
+        this.setState({walletAddress:event.target.value});
+    }
+
     renderBalance()
     {
         var btnClassName = "row currency-action"
-        var sighHandFn = this.signHandler
+        var sighHandFn = this.signHandlerConvert
+        var authText = "Sign";
+        var maxV = this.state.allowance.toNumber()/10.0;
+        var inpClassName = "row currency-action"         
 
         var akdcBalance = this.readableNumber(this.state.balance,this.state.decimal);
         var allowanceBalance = this.readableNumber(this.state.allowance,this.state.decimal);
 
+        if(this.state.allowance.toNumber()===0)
+        {
+            authText = "Authorize";
+            sighHandFn = this.authorizeHandler
+            maxV = this.state.balance.toNumber()/10.0;
+            inpClassName = "row currency-inaction"            
+        }
+
         return(
         <div className="row checkout-card-sign">
             <div className="row convert-card">
-                <div className="col s8 m6">
+                <div className="col s6 m6">
                     <div className="card">
                         <div className="card-content">
                             <div></div><span className="card-title">Your Address</span>
@@ -193,14 +217,27 @@ class CryptoSwap extends Component{
                         <span className="sol-logo"><img src={solLogo} alt="Solana"></img></span>
                     </div>                    
                 </div>                               
+            </div>
+
+            <div className="row">
+                <div className="payment-form-label">{authText} <span ref={this.akdcRef}>10.00</span> AKDCs</div>  
+                <div className="input-field col s6">                    
+                    <input ref={this.amtRef} type="range" min="100" max={maxV} defaultValue="100" onChange={this.handleAmountChange}/>                 
+                </div>                
             </div>            
-            
+            <div className={inpClassName}>
+                <div className="payment-form-label">Destination Wallet Address (Solana)</div>  
+                <div className="payment-form-warning">Please verify carefully. Currency is lost in case of typographic errors.</div>
+                <div className="input-field col s6">                    
+                <input ref={this.wallRef} id="wallet_address" type="text" className="validate" onChange={this.handleTextChange}/>                  
+                </div>                
+            </div>
             <div className={btnClassName}>
                 <button className="btn waves-effect waves-light btn-small" 
                         type="button" 
                         name="action"
-                        onClick={sighHandFn}>
-                        Sign   
+                        onClick={sighHandFn}>                        
+                        {authText}  
                 </button>
             </div>
 
@@ -209,6 +246,24 @@ class CryptoSwap extends Component{
             </div>            
         </div>
         );
+    }
+
+    renderComplete()
+    {
+
+        return(
+            <div className="row checkout-card-sign">
+                <div className="transaction-success-message row">
+                    <h3>Success!</h3>
+                    <div>We will soon transfer {this.state.amount} AKDCs to Solana {this.state.walletAddress}</div>
+                </div>
+                
+                <div className="row msft-branding">
+                    <span className="msft-logo">Powered by &nbsp;<img src={msftLogo} alt="Microsoft"></img></span>
+                </div>            
+            </div>
+        );
+
     }
 
     render()
@@ -220,6 +275,9 @@ class CryptoSwap extends Component{
 
             case "balance":
                 return this.renderBalance();
+            
+            case "completed":
+                return this.renderComplete();
             
             default:
                 return(<div className="metamask-not-found">Unable to connect to Metamask</div>)
