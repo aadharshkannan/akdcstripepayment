@@ -208,7 +208,6 @@ class CryptoCheckout extends Component{
         
         const gsnConfig = { 
             paymasterAddress:this.props.gsn.payMaster,
-            preferredRelays:[this.props.gsn.preferredRelay],
             relayLookupWindowBlocks: 990,
             relayRegistrationLookupBlocks: 990,
             pastEventsQueryMaxPageSize: 990,            
